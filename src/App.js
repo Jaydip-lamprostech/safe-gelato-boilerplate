@@ -1,29 +1,19 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { SafeAuthKit, Web3AuthModalPack } from "@safe-global/auth-kit";
-import { Web3AuthOptions } from "@web3auth/modal";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { WALLET_ADAPTERS } from "@web3auth/base";
-import Safe, {
-  SafeFactory,
-  SafeAccountConfig,
-} from "@safe-global/protocol-kit";
+import Safe, { SafeFactory } from "@safe-global/protocol-kit";
 
 import { ethers } from "ethers";
 import { EthersAdapter } from "@safe-global/protocol-kit";
 import { GelatoRelayAdapter } from "@safe-global/relay-kit";
-import {
-  MetaTransactionData,
-  MetaTransactionOptions,
-  OperationType,
-} from "@safe-global/safe-core-sdk-types";
-// import {
-//   GelatoRelay,
-//   SponsoredCallERC2771Request,
-// } from "@gelatonetwork/relay-sdk";
+import { OperationType } from "@safe-global/safe-core-sdk-types";
+
 import contractABI from "./artifacts/contract.json";
-const contractAddress = "0x61De71734C89C9a359028962f6834A2ae099293e";
+
+// const contractAddress = "0x61De71734C89C9a359028962f6834A2ae099293e";
+const contractAddress = "0x4a88d4D7A355cbC6a45D95D53aB70829EA249275";
 
 const WEB3_AUTH_CLIENT_ID =
   "BNVHKQQNqwNQSTBomstQ29-Hxh-ri77E5OreTGJ6lLyHr0vj7cnbr6sZTxOXyjF_8nlYltULDWY-f2Cx70PbMUM";
@@ -36,64 +26,66 @@ function App() {
     signer: "",
   });
 
-  // https://web3auth.io/docs/sdk/web/modal/initialize#arguments
-  const options = {
-    clientId: WEB3_AUTH_CLIENT_ID,
-    web3AuthNetwork: "testnet",
-    // chainConfig: {
-    //   chainNamespace: "eip155",
-    //   chainId: "0x13881", // hex of 80001, polygon testnet
-    //   rpcTarget: "https://rpc-mumbai.maticvigil.com/",
-    // },
-    chainConfig: {
-      chainNamespace: "eip155",
-      chainId: "0x5",
-      // https://chainlist.org/
-      rpcTarget: `https://rpc.ankr.com/eth_goerli`,
-    },
-    uiConfig: {
-      theme: "dark",
-      loginMethodsOrder: ["google", "facebook"],
-    },
-  };
-
-  // https://web3auth.io/docs/sdk/web/modal/initialize#configuring-adapters
-  const modalConfig = {
-    [WALLET_ADAPTERS.TORUS_EVM]: {
-      label: "torus",
-      showOnModal: false,
-    },
-    [WALLET_ADAPTERS.METAMASK]: {
-      label: "metamask",
-      showOnDesktop: true,
-      showOnMobile: false,
-    },
-  };
-
-  // https://web3auth.io/docs/sdk/web/modal/whitelabel#whitelabeling-while-modal-initialization
-  const openloginAdapter = new OpenloginAdapter({
-    loginSettings: {
-      mfaLevel: "mandatory",
-    },
-    adapterSettings: {
-      uxMode: "popup",
-      whiteLabel: {
-        name: "Safe",
-      },
-    },
-  });
-
-  const pack = new Web3AuthModalPack(options, [openloginAdapter], modalConfig);
-
-  const initializeSafe = async () => {
-    const safeAuthKit = await SafeAuthKit.init(pack, {
-      txServiceUrl: "https://safe-transaction-goerli.safe.global",
-    });
-
-    console.log(safeAuthKit);
-    setSafeInstance(safeAuthKit);
-  };
   useEffect(() => {
+    // https://web3auth.io/docs/sdk/web/modal/initialize#arguments
+    const options = {
+      clientId: WEB3_AUTH_CLIENT_ID,
+      web3AuthNetwork: "testnet",
+      // chainConfig: {
+      //   chainNamespace: "eip155",
+      //   chainId: "0x13881", // hex of 80001, polygon testnet
+      //   rpcTarget: "https://rpc-mumbai.maticvigil.com/",
+      // },
+      chainConfig: {
+        chainNamespace: "eip155",
+        chainId: "0x5",
+        // https://chainlist.org/
+        rpcTarget: `https://rpc.ankr.com/eth_goerli`,
+      },
+      uiConfig: {
+        theme: "dark",
+        loginMethodsOrder: ["google", "facebook"],
+      },
+    };
+
+    // https://web3auth.io/docs/sdk/web/modal/initialize#configuring-adapters
+    const modalConfig = {
+      [WALLET_ADAPTERS.TORUS_EVM]: {
+        label: "torus",
+        showOnModal: false,
+      },
+      [WALLET_ADAPTERS.METAMASK]: {
+        label: "metamask",
+        showOnDesktop: true,
+        showOnMobile: false,
+      },
+    };
+
+    // https://web3auth.io/docs/sdk/web/modal/whitelabel#whitelabeling-while-modal-initialization
+    const openloginAdapter = new OpenloginAdapter({
+      loginSettings: {
+        mfaLevel: "mandatory",
+      },
+      adapterSettings: {
+        uxMode: "popup",
+        whiteLabel: {
+          name: "Safe",
+        },
+      },
+    });
+    const pack = new Web3AuthModalPack(
+      options,
+      [openloginAdapter],
+      modalConfig
+    );
+    const initializeSafe = async () => {
+      const safeAuthKit = await SafeAuthKit.init(pack, {
+        txServiceUrl: "https://safe-transaction-goerli.safe.global",
+      });
+
+      console.log(safeAuthKit);
+      setSafeInstance(safeAuthKit);
+    };
     initializeSafe();
   }, []);
 
@@ -105,7 +97,8 @@ function App() {
       const provider = new ethers.providers.Web3Provider(
         safeInstance.getProvider()
       );
-
+      const balance = await provider.getBalance(userAddress.eoa);
+      console.log(parseInt(balance) / Math.pow(10, 18));
       setUserData({
         ...userData,
         address: userAddress,
@@ -188,9 +181,7 @@ function App() {
     });
     console.log(safeSDK);
 
-    const relayAdapter = new GelatoRelayAdapter(
-      "MuKjSVedmLh21RUTtQUA8V1MCeBnRhRjn2xT61_IPVQ_"
-    );
+    const relayAdapter = new GelatoRelayAdapter(GELATO_RELAY_API_KEY);
 
     console.log(relayAdapter);
     // encode data
@@ -200,7 +191,7 @@ function App() {
       userData.signer
     );
     const functionName = "sayHello";
-    const functionArgs = "Hello, there!!";
+    const functionArgs = "Hello, jD!!";
 
     const functionData = contract.interface.encodeFunctionData(functionName, [
       functionArgs,
@@ -252,9 +243,31 @@ function App() {
     );
   };
 
+  //contract get msg function
+
+  const getMsg = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(
+        safeInstance.getProvider()
+      );
+      const signer = provider.getSigner();
+      console.log(signer);
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+      console.log(contract);
+      const data = await contract.getHello();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   //using safe-Gelato-send-transaction
 
-  const usingSafeGaleto = async () => {
+  const usingSafeGelato = async () => {
     // Customize the following variables
     // https://chainlist.org
     // const RPC_URL =
@@ -343,12 +356,40 @@ function App() {
     );
   };
 
+  const sendFunds = async () => {
+    try {
+      const destination = "0x1B1d688A5b37e57Be1179694D0f15E05B6de8cC3";
+      const amount = ethers.utils.parseEther("0.48");
+      console.log(amount);
+      // const fromAddress = (await web3.eth.getAccounts())[0];
+      // console.log(fromAddress);
+      // Send transaction to smart contract to update message
+      const tx = await userData.signer.sendTransaction({
+        from: userData.address.eoa,
+        to: destination,
+        value: amount,
+      });
+      // const tx = await web3.eth.sendTransaction({
+      //   from: userData.address.eoa.toString(),
+      //   to: destination,
+      //   value: amount,
+      // });
+      // const receipt = await tx.wait();
+      console.log(tx);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="App">
       <button onClick={login}>Login</button>
-      <button onClick={usingSafeGaleto}>usingSafeGaleto</button>
       <button onClick={deploySafe}>deploySafe</button>
+
+      <button onClick={usingSafeGelato}>usingSafeGelato</button>
+
       <button onClick={sayHello}>Send Msg</button>
+      <button onClick={getMsg}>get msg</button>
+      <button onClick={sendFunds}>sendFunds</button>
     </div>
   );
 }

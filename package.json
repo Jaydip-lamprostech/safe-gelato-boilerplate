@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "@safe-global/auth-kit": "^1.0.0",
-    "@safe-global/protocol-kit": "^1.0.0",
+    "@safe-global/protocol-kit": "^0.1.1",
+    "@safe-global/relay-kit": "^0.1.1",
+    "@safe-global/safe-core-sdk-types": "^1.10.1",
+    "@safe-global/safe-deployments": "^1.22.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

@@ -16,7 +16,7 @@ import contractABI from "./artifacts/contract.json";
 const contractAddress = "0x4a88d4D7A355cbC6a45D95D53aB70829EA249275";
 
 const WEB3_AUTH_CLIENT_ID =
-  "BNVHKQQNqwNQSTBomstQ29-Hxh-ri77E5OreTGJ6lLyHr0vj7cnbr6sZTxOXyjF_8nlYltULDWY-f2Cx70PbMUM";
+  "BJolOCXyRwP89SBB61VIfZjR3VdkB_-fDEfDmk_GSI02QEY21-anUB0CyaEmiWJjLdzIGtgJNYozp8KjXMhuay4";
 
 function App() {
   const [safeInstance, setSafeInstance] = useState();

@@ -126,7 +126,7 @@ function App() {
       const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
       console.log(provider);
       // const signer = userData.signer;
-      console.log(process.env.REACT_APP_P_KEY);
+      console.log(process.env.P_KEY);
       const owner1Signer = new ethers.Wallet(`${process.env.P_KEY}`, provider);
       console.log(owner1Signer);
       console.log(userData.address);

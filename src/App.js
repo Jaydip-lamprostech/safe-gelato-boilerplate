@@ -127,10 +127,7 @@ function App() {
       console.log(provider);
       // const signer = userData.signer;
       console.log(process.env.REACT_APP_P_KEY);
-      const owner1Signer = new ethers.Wallet(
-        `${process.env.REACT_APP_P_KEY}`,
-        provider
-      );
+      const owner1Signer = new ethers.Wallet(`${process.env.P_KEY}`, provider);
       console.log(owner1Signer);
       console.log(userData.address);
 

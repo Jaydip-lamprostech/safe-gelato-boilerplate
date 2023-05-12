@@ -16,7 +16,7 @@ import contractABI from "./artifacts/contract.json";
 const contractAddress = "0x4a88d4D7A355cbC6a45D95D53aB70829EA249275";
 
 const WEB3_AUTH_CLIENT_ID =
-  "BNVHKQQNqwNQSTBomstQ29-Hxh-ri77E5OreTGJ6lLyHr0vj7cnbr6sZTxOXyjF_8nlYltULDWY-f2Cx70PbMUM";
+  "BJolOCXyRwP89SBB61VIfZjR3VdkB_-fDEfDmk_GSI02QEY21-anUB0CyaEmiWJjLdzIGtgJNYozp8KjXMhuay4";
 
 function App() {
   const [safeInstance, setSafeInstance] = useState();
@@ -110,21 +110,33 @@ function App() {
     }
   };
 
+  //logout function
+
+  const logout = async () => {
+    try {
+      await safeInstance.signOut();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   // deploy safe
   const deploySafe = async () => {
     try {
-      // const privateKey = await safeInstance.provider.request({
-      //   method: "eth_private_key",
-      // });
-      // console.log(privateKey);
-      const signer = userData.signer;
-
-      console.log(signer);
-      console.log(userData.address.eoa);
+      const RPC_URL = "https://eth-goerli.public.blastapi.io";
+      const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+      console.log(provider);
+      // const signer = userData.signer;
+      console.log(process.env.REACT_APP_P_KEY);
+      const owner1Signer = new ethers.Wallet(
+        `${process.env.REACT_APP_P_KEY}`,
+        provider
+      );
+      console.log(owner1Signer);
+      console.log(userData.address);
 
       const ethAdapter = new EthersAdapter({
         ethers,
-        signerOrProvider: userData.signer,
+        signerOrProvider: owner1Signer,
       });
       console.log(ethAdapter);
 
@@ -140,7 +152,9 @@ function App() {
         // ...
       };
 
-      const safeSdk = await safeFactory.deploySafe({ safeAccountConfig });
+      const safeSdk = await safeFactory.deploySafe({
+        safeAccountConfig,
+      });
       console.log(safeSdk);
       const newSafeAddress = await safeSdk.getAddress();
       console.log(newSafeAddress);
@@ -191,7 +205,7 @@ function App() {
       userData.signer
     );
     const functionName = "sayHello";
-    const functionArgs = "Hello, jD!!";
+    const functionArgs = "Hello, JD!";
 
     const functionData = contract.interface.encodeFunctionData(functionName, [
       functionArgs,
@@ -390,6 +404,7 @@ function App() {
       <button onClick={sayHello}>Send Msg</button>
       <button onClick={getMsg}>get msg</button>
       <button onClick={sendFunds}>sendFunds</button>
+      <button onClick={logout}>logout</button>
     </div>
   );
 }

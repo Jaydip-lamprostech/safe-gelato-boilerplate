@@ -1,0 +1,203 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .navbar {
+    height: 10vh;
+    max-height: 10vh;
+    color: black;
+    z-index: 1000;
+    padding: 8px;
+    position: relative;
+    top: 0;
+    width: 90%;
+    max-width: 1230px;
+    color: white;
+    /* background-color: #111; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px; */
+
+    .logo {
+      /* padding: 0 20px; */
+      flex: 1 1;
+      font-family: "Merriweather Sans";
+      font-weight: 700;
+
+      h1 {
+        line-height: 2;
+        font-size: 30px;
+        text-align: left;
+      }
+    }
+    button {
+      height: 40px;
+      padding: 0 24px;
+      font-weight: 700;
+      border-radius: 99999px;
+    }
+    button.login-button {
+      margin: 0 5px;
+      background-color: #ff592c;
+      border: 1px solid #ff592c;
+      color: white;
+      &:hover {
+        background-color: #f83500;
+        border: 1px solid #f83500;
+      }
+    }
+    button.logged-in {
+      background-color: #23262f;
+      border: 1px solid #23262f;
+      color: white;
+      &:hover {
+        background-color: #f83500;
+        border: 1px solid #f83500;
+      }
+    }
+    .navmenu {
+      /* margin-left: auto; */
+      padding: 0 25px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      list-style: none;
+      flex-wrap: wrap;
+
+      .navitem {
+        margin-left: 25px;
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: scaleX(1.1);
+        }
+
+        .navlink {
+          font-size: 1.2rem;
+          font-family: "Merriweather Sans";
+          font-weight: 400;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .hamburger {
+      background-color: #23262f;
+      display: none;
+      margin-left: 10px;
+      color: rgb(29, 29, 29);
+      border: none;
+      border-radius: 8px;
+      padding: 0.25em 0.5em;
+      //   box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px,
+      //     4px 4px 0px 0px, 5px 5px 0px 0px;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+
+      .bar {
+        display: block;
+        width: 32px;
+        height: 3px;
+        margin: 5px auto;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        background-color: #ffffff;
+      }
+    }
+    // .hamburger.active {
+    //   box-shadow: 0px 0px 0px 0px;
+    //   top: 5px;
+    //   left: 5px;
+    // }
+    .button {
+      /* font-family: "Open Sans", sans-serif; */
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: bolder;
+      color: rgb(0, 0, 0);
+      cursor: pointer;
+      background: #7effe0;
+      padding: 0.25em 0.5em;
+      /* margin-top: 12px; */
+      border-radius: 10px;
+      border: 4px solid rgb(0, 0, 0);
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    .button:active {
+      box-shadow: 0px 0px 0px 0px;
+      top: 5px;
+      left: 5px;
+    }
+  }
+}
+
+.hr {
+  margin: 10px;
+  width: 70%;
+}
+
+@media (max-width: 768px) {
+  /* .connect {
+        visibility: hidden;
+      } */
+
+  .header {
+    .navbar {
+      justify-content: space-around;
+      .logo h1 {
+        line-height: 1;
+        font-size: 10px;
+      }
+      .navmenu {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top: 2px solid rgb(211, 211, 211);
+        border-bottom: 2px solid rgb(211, 211, 211);
+        z-index: 100;
+        position: fixed;
+        left: -100%;
+        top: 3.3rem;
+        flex-direction: column;
+        background: rgb(18, 18, 18);
+        width: 50%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+
+        .navitem {
+          margin: 2.5rem 0;
+        }
+      }
+      .navmenu.active {
+        left: 0;
+      }
+      .hamburger {
+        /* margin-left: auto; */
+        display: block;
+        cursor: pointer;
+      }
+
+      .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active .bar:nth-child(1) {
+        -webkit-transform: translateY(8px) rotate(45deg);
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .hamburger.active .bar:nth-child(3) {
+        -webkit-transform: translateY(-8px) rotate(-45deg);
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+  }
+}

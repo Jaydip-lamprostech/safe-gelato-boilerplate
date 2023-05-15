@@ -1,16 +1,24 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { SafeAuthKit, Web3AuthModalPack } from "@safe-global/auth-kit";
-import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
-import { WALLET_ADAPTERS } from "@web3auth/base";
-import Safe, { SafeFactory } from "@safe-global/protocol-kit";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { ethers } from "ethers";
+import { SafeAuthKit, Web3AuthModalPack } from "@safe-global/auth-kit";
 import { EthersAdapter } from "@safe-global/protocol-kit";
 import { GelatoRelayAdapter } from "@safe-global/relay-kit";
 import { OperationType } from "@safe-global/safe-core-sdk-types";
+import Safe, { SafeFactory } from "@safe-global/protocol-kit";
+import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
+import { WALLET_ADAPTERS } from "@web3auth/base";
+
+import { ethers } from "ethers";
 
 import contractABI from "./artifacts/contract.json";
+import LandingPage from "./pages/LandingPage";
+import Navbar from "./components/Navbar";
+import FirstPage from "./pages/FirstPage";
+import SecondPage from "./pages/SecondPage";
+import ThirdPage from "./pages/ThirdPage";
+import Footer from "./components/Footer";
 
 // const contractAddress = "0x61De71734C89C9a359028962f6834A2ae099293e";
 const contractAddress = "0x4a88d4D7A355cbC6a45D95D53aB70829EA249275";
@@ -27,6 +35,7 @@ function App() {
   });
 
   useEffect(() => {
+    console.log(`${process.env.REACT_APP_IMP_K}`);
     // https://web3auth.io/docs/sdk/web/modal/initialize#arguments
     const options = {
       clientId: WEB3_AUTH_CLIENT_ID,
@@ -105,6 +114,10 @@ function App() {
         provider: provider,
         signer: provider.getSigner(),
       });
+      // check this below condition before calling any other function except login
+      // if (userAddress.safes.length === 0) {
+      //   deploySafe();
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -115,6 +128,11 @@ function App() {
   const logout = async () => {
     try {
       await safeInstance.signOut();
+      setUserData({
+        provider: "",
+        address: "",
+        signer: "",
+      });
     } catch (err) {
       console.log(err);
     }
@@ -124,9 +142,8 @@ function App() {
     try {
       const RPC_URL = "https://eth-goerli.public.blastapi.io";
       const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-      console.log(provider);
+      // console.log(provider);
       // const signer = userData.signer;
-      console.log(`${process.env.REACT_APP_IMP_K}`);
       const owner1Signer = new ethers.Wallet(
         `${process.env.REACT_APP_IMP_K}`,
         provider
@@ -157,6 +174,9 @@ function App() {
       });
       console.log(safeSdk);
       const newSafeAddress = await safeSdk.getAddress();
+      console.log("Your Safe has been deployed:");
+      console.log(`https://goerli.etherscan.io/address/${newSafeAddress}`);
+      console.log(`https://app.safe.global/gor:${newSafeAddress}`);
       console.log(newSafeAddress);
     } catch (err) {
       console.log(err);
@@ -205,7 +225,7 @@ function App() {
       userData.signer
     );
     const functionName = "sayHello";
-    const functionArgs = "Hello, JD!";
+    const functionArgs = "Good morning!";
 
     const functionData = contract.interface.encodeFunctionData(functionName, [
       functionArgs,
@@ -375,20 +395,11 @@ function App() {
       const destination = "0x1B1d688A5b37e57Be1179694D0f15E05B6de8cC3";
       const amount = ethers.utils.parseEther("0.48");
       console.log(amount);
-      // const fromAddress = (await web3.eth.getAccounts())[0];
-      // console.log(fromAddress);
-      // Send transaction to smart contract to update message
       const tx = await userData.signer.sendTransaction({
         from: userData.address.eoa,
         to: destination,
         value: amount,
       });
-      // const tx = await web3.eth.sendTransaction({
-      //   from: userData.address.eoa.toString(),
-      //   to: destination,
-      //   value: amount,
-      // });
-      // const receipt = await tx.wait();
       console.log(tx);
     } catch (err) {
       console.log(err);
@@ -396,7 +407,7 @@ function App() {
   };
   return (
     <div className="App">
-      <button onClick={login}>Login</button>
+      {/* <button onClick={login}>Login</button>
       <button onClick={deploySafe}>deploySafe</button>
 
       <button onClick={usingSafeGelato}>usingSafeGelato</button>
@@ -404,7 +415,18 @@ function App() {
       <button onClick={sayHello}>Send Msg</button>
       <button onClick={getMsg}>get msg</button>
       <button onClick={sendFunds}>sendFunds</button>
-      <button onClick={logout}>logout</button>
+      <button onClick={logout}>logout</button> */}
+
+      <Router>
+        <Navbar login={login} userData={userData} logout={logout} />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/first-page" element={<FirstPage />} />
+          <Route path="/second-page" element={<SecondPage />} />
+          <Route path="/third-page" element={<ThirdPage />} />
+        </Routes>
+        <Footer />
+      </Router>
     </div>
   );
 }

@@ -15,7 +15,7 @@ function Navbar(props) {
     <>
       <header className="header">
         <nav className="navbar">
-          <span className="logo animate__animated animate__fadeInDown">
+          <span className="logo animate__animated animate__fadeInDown animate__delay-2s">
             <Link to="/">
               {/* <Image src={logo} alt="logo" /> */}
               <h1 className="logo-h1">
@@ -27,8 +27,8 @@ function Navbar(props) {
           <ul
             className={
               isExpanded === false
-                ? "navmenu animate__animated animate__fadeInDown"
-                : "navmenu active animate__animated animate__fadeInDown"
+                ? "navmenu animate__animated animate__fadeInDown animate__delay-2s"
+                : "navmenu active animate__animated animate__fadeInDown animate__delay-2s"
             }
           >
             <li className="navitem">
@@ -84,7 +84,7 @@ function Navbar(props) {
             </>
           ) : (
             <button
-              className="login-button animate__animated animate__fadeInDown"
+              className="login-button animate__animated animate__fadeInDown animate__delay-2s"
               onClick={props.login}
             >
               Login

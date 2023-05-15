@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/navbar.scss";
+import "animate.css";
 
 function Navbar(props) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -14,7 +15,7 @@ function Navbar(props) {
     <>
       <header className="header">
         <nav className="navbar">
-          <span className="logo">
+          <span className="logo animate__animated animate__fadeInDown">
             <Link to="/">
               {/* <Image src={logo} alt="logo" /> */}
               <h1 className="logo-h1">
@@ -23,7 +24,13 @@ function Navbar(props) {
               </h1>
             </Link>
           </span>
-          <ul className={isExpanded === false ? "navmenu" : "navmenu active"}>
+          <ul
+            className={
+              isExpanded === false
+                ? "navmenu animate__animated animate__fadeInDown"
+                : "navmenu active animate__animated animate__fadeInDown"
+            }
+          >
             <li className="navitem">
               <span>
                 <Link
@@ -76,7 +83,10 @@ function Navbar(props) {
               </button>
             </>
           ) : (
-            <button className="login-button" onClick={props.login}>
+            <button
+              className="login-button animate__animated animate__fadeInDown"
+              onClick={props.login}
+            >
               Login
             </button>
           )}

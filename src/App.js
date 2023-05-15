@@ -19,6 +19,7 @@ import FirstPage from "./pages/FirstPage";
 import SecondPage from "./pages/SecondPage";
 import ThirdPage from "./pages/ThirdPage";
 import Footer from "./components/Footer";
+import Profile from "./pages/Profile";
 
 // const contractAddress = "0x61De71734C89C9a359028962f6834A2ae099293e";
 const contractAddress = "0x4a88d4D7A355cbC6a45D95D53aB70829EA249275";
@@ -32,6 +33,10 @@ function App() {
     provider: "",
     address: "",
     signer: "",
+    balance: "",
+    profileImg: "",
+    name: "",
+    email: "",
   });
 
   useEffect(() => {
@@ -103,16 +108,22 @@ function App() {
     try {
       const userAddress = await safeInstance.signIn();
       console.log(userAddress);
+      const info = await safeInstance.getUserInfo();
+      console.log(info);
       const provider = new ethers.providers.Web3Provider(
         safeInstance.getProvider()
       );
       const balance = await provider.getBalance(userAddress.eoa);
-      console.log(parseInt(balance) / Math.pow(10, 18));
+      console.log();
       setUserData({
         ...userData,
         address: userAddress,
         provider: provider,
         signer: provider.getSigner(),
+        balance: parseInt(balance) / Math.pow(10, 18),
+        profileImg: info.profileImage,
+        email: info.email,
+        name: info.name,
       });
       // check this below condition before calling any other function except login
       // if (userAddress.safes.length === 0) {
@@ -132,6 +143,10 @@ function App() {
         provider: "",
         address: "",
         signer: "",
+        balance: "",
+        profileImg: "",
+        name: "",
+        email: "",
       });
     } catch (err) {
       console.log(err);
@@ -421,6 +436,12 @@ function App() {
         <Navbar login={login} userData={userData} logout={logout} />
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/profile"
+            element={
+              <Profile userData={userData} safeInstance={safeInstance} />
+            }
+          />
           <Route path="/first-page" element={<FirstPage />} />
           <Route path="/second-page" element={<SecondPage />} />
           <Route path="/third-page" element={<ThirdPage />} />

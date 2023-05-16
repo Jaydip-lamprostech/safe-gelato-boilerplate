@@ -108,7 +108,7 @@ function Navbar(props) {
             </>
           ) : (
             <button
-              className="login-button animate__animated animate__fadeInDown"
+              className="login-button animate__animated animate__fadeInDown animate__delay-2s"
               onClick={props.login}
             >
               Login
